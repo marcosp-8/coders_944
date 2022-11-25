@@ -6,7 +6,8 @@ fun main() {
     println("Digite seu nome: ")
     val nome = readln()
 
-    //val é imutável!
+    //val é imutável! ou seja, não é possível alterar o valor que foi atribuído a ela
+    //var pode receber diversos valores de diversos tipos diferentes durante o runtime
 
     println("Digite sua idade: ")
     var idade: Int? = readln().toIntOrNull() ?: 0
