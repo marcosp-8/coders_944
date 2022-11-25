@@ -1,4 +1,5 @@
 package logicaDeProgramacao.avaliacao
+
 fun main() {
     println("=====Bem vindo ao i-Stock=====\n")
 
@@ -6,12 +7,18 @@ fun main() {
 
     println("Obrigado por utilizar nosso programa!")
 }
+
 fun iStock() {
     contentValidator(pecas)
 
     do {
         println(opcoes)
-        val selecao: Int = readln().toInt()
+        val selecao = 0
+        try {
+            readln().toInt()
+        } catch (e: NumberFormatException) {
+            println("\nValor inválido. Digite uma das opções disponíves.")
+        }
 
         when (selecao) {
             addItem -> addItemToStock(pecas)
@@ -21,18 +28,26 @@ fun iStock() {
         }
     } while (selecao != close)
 }
+
 fun contentValidator(lista: MutableList<Pair<String, Int>>) {
     if (lista.isEmpty()) {
         println("Ainda não há itens cadastrados no sistema :/ \nAdicione novo item.\n")
         addItemToStock(lista)
     } else return
 }
+
 fun addItemToStock(lista: MutableList<Pair<String, Int>>) {
     do {
         println("Digite o nome da peça: ")
         val nome = readln()
         println("Digite sua quantidade: ")
-        var quantidade = readln().toInt()
+        var quantidade: Int
+        try {
+            readln().toInt().also { quantidade = it }
+        } catch (e: java.lang.NumberFormatException) {
+            println("Valor informado inválido. Será tratado como 0.")
+            quantidade = 0
+        }
         while (quantidade < 0 || quantidade > 999) {
             println("Quantidade inválida! Insira novo valor: ")
             quantidade = readln().toInt()
@@ -45,50 +60,53 @@ fun addItemToStock(lista: MutableList<Pair<String, Int>>) {
 
     } while (newItem != "N")
 }
-fun editItem(lista: MutableList<Pair<String, Int>>) {
-        do {
-            println("Digite o ID do item que deseja editar: ")
-            val id = readln().toInt()
 
-            println(
-                """ 
+fun editItem(lista: MutableList<Pair<String, Int>>) {
+    do {
+        println("Digite o ID do item que deseja editar: ")
+        val id = readln().toInt()
+
+        println(
+            """ 
                 O que deseja editar?
                 
                 1 - NOME
                 2 - QUANTIDADE
             """.trimIndent()
-            )
+        )
 
-            when (readln().toInt()) {
-                1 -> {
-                    print(
-                        """
+        when (readln().toInt()) {
+            1 -> {
+                print(
+                    """
                          Nome atual: ${lista[id - 1].first}
                          Insira o novo nome: """.trimIndent()
-                    )
+                )
 
-                    lista[id - 1] = Pair(readln(), lista[id - 1].second)
-                }
+                lista[id - 1] = Pair(readln(), lista[id - 1].second)
+            }
 
-                2 -> {
-                    print(
-                        """ 
+            2 -> {
+                print(
+                    """ 
                         Quantidade atual: ${lista[id - 1].second}
                         Insira a nova quantidade: """.trimIndent()
-                    )
-                    lista[id - 1] = Pair(lista[id - 1].first, readln().toInt())
-                }
+                )
+                lista[id - 1] = Pair(lista[id - 1].first, readln().toInt())
             }
-            println("Deseja editar outro item? (S/N)")
-            val newEdit = readln().uppercase()
-
-        } while (newEdit != "N")
-}
-fun showStockAvailable(lista: MutableList<Pair<String, Int>>) {
-        for (i in 0..lista.size.dec()) {
-            if (lista[i].second >= 1) println("#%03d".format(i + 1) + "| ${lista[i].first} | ${lista[i].second}")
         }
+        println("Deseja editar outro item? (S/N)")
+        val newEdit = readln().uppercase()
+
+    } while (newEdit != "N")
 }
+
+fun showStockAvailable(lista: MutableList<Pair<String, Int>>) {
+    for (i in 0..lista.size.dec()) {
+        if (lista[i].second >= 1) println("#%03d".format(i + 1) + "| ${lista[i].first} | ${lista[i].second}")
+    }
+}
+
 fun showFullStock(lista: MutableList<Pair<String, Int>>) {
     for (i in 0..lista.size.dec()) {
         println("#%03d".format(i + 1) + "| ${lista[i].first} | ${lista[i].second}")
